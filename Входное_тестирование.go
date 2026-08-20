@@ -17,7 +17,7 @@ func checkDataText(data []string) bool {
 	if len(data) != 4 {
 		return false
 	}
-	
+
 	pattern, err := regexp.MatchString(`^TICKET-\d+$`, strings.TrimSpace(data[0]))
 	if !pattern || err != nil {
 		return false
@@ -68,27 +68,27 @@ func GetTasks(text string, user *string, status *string) []Ticket {
 	tickets := []Ticket{}
 
 	lines := strings.Split(text, "\n")
-	
+
 	for _, line := range lines {
 		if strings.TrimSpace(line) == "" {
 			continue
 		}
-		
+
 		startIdx := strings.Index(line, "TICKET-")
 		if startIdx == -1 {
 			continue
 		}
-		
+
 		ticketLine := line[startIdx:]
-		
+
 		array := getArray(ticketLine)
-		
+
 		if !checkDataText(array) {
 			continue
 		}
 
 		timeStamp, _ := time.Parse("2006-01-02", strings.TrimSpace(array[3]))
-		
+
 		tickets = append(tickets, Ticket{
 			Ticket: strings.TrimSpace(array[0]),
 			User:   strings.TrimSpace(array[1]),
